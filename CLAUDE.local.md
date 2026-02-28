@@ -131,6 +131,28 @@ dev-house/
 - **Subagents** = heavy lifting (reading, analysis, implementation)
 - **Batch operations** — 1 message = all related reads, writes, edits
 
+### Documentation & Review Policy
+
+**RULE: Code changes = docs updated in same commit. No deferred documentation.**
+
+1. **Before committing**: Check [DOCUMENTATION_MAINTENANCE.md](DOCUMENTATION_MAINTENANCE.md)
+   - What did I change?
+   - What docs must I update?
+   - Update them before committing
+
+2. **Gotchas discovered?** Add to [GOTCHAS.md](GOTCHAS.md)
+   - Problem, why, solution, prevention
+   - Link from relevant docs
+
+3. **Pattern learned?** Add to [.claude/memory/PATTERNS.md](.claude/memory/PATTERNS.md)
+   - Persistent knowledge across sessions
+   - Add to "Session Learnings" table
+
+4. **Review policy**: [REVIEW_POLICY.md](REVIEW_POLICY.md)
+   - Per-commit (immediate): Check map, update docs
+   - Per-session (every few commits): Spot-check consistency
+   - Quarterly deep review: Verify all docs against implementation
+
 ---
 
 ## Search Exclusions

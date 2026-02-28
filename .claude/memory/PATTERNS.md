@@ -2,9 +2,12 @@
 
 Session-persistent knowledge base for recurring patterns, architecture insights, and security learnings.
 
-**Quick Links**:
+**Quick Links (Session Reference)**:
 - **[Naming Standards Router](NAMING-STANDARDS.md)** — Quick reference for deciding file naming patterns
 - **Naming Details**: See `NAMING-STANDARDS.md` in repository root
+- **Review Policy**: See `REVIEW_POLICY.md` in root (per-commit, per-session, quarterly reviews)
+- **Doc-Code Sync Map**: See `DOCUMENTATION_MAINTENANCE.md` (what to update when you change X)
+- **Gotchas**: See `GOTCHAS.md` (things that don't work out of the box)
 
 ## Foundation Session (2026-02-28)
 

@@ -7,6 +7,9 @@
 | What You Need | Document | Purpose |
 |---------------|----------|---------|
 | **Project naming standards** | [NAMING-STANDARDS.md](../NAMING-STANDARDS.md) | File naming patterns (sequential, snapshot, descriptive, code, config) with decision router |
+| **Doc-code sync map** | [DOCUMENTATION_MAINTENANCE.md](../DOCUMENTATION_MAINTENANCE.md) | When you change X, update Y docs (prevents documentation drift) |
+| **Content review policy** | [REVIEW_POLICY.md](../REVIEW_POLICY.md) | Self-review process: per-commit, per-session, quarterly deep reviews with staleness detection |
+| **Edge cases & gotchas** | [GOTCHAS.md](../GOTCHAS.md) | Things that don't work out of the box — captured as we discover them |
 | **High-level architecture** | [architecture/overview.md](#) | System design, layers, components |
 | **How it all connects** | [architecture/decisions.md](#) | Why we chose this architecture |
 | **Claude Harness patterns** | [harness/orchestration.md](#) | Harness workflow engine |
