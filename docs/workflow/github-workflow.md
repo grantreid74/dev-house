@@ -352,17 +352,17 @@ gh issue list --search "pattern: P"
 2. **Issue description must explain why** — Not just what
 3. **Acceptance criteria must be testable** — Clear definition of done
 4. **PR must reference issue** — "Closes #123" creates link
-5. **Gotchas discovered go to GOTCHAS.md** — AND mention in issue comment
+5. **Gotchas discovered go to gotchas.md** — AND mention in issue comment
 6. **Patterns discovered get documented** — Issue + docs + memory update
-7. **Every PR mentions docs updated** — Per DOCUMENTATION_MAINTENANCE.md
+7. **Every PR mentions docs updated** — Per documentation-maintenance.md
 8. **Issue history is project history** — Don't delete old issues, close them
 
 ---
 
 ## Links
 
-- **[../../DOCUMENTATION_MAINTENANCE.md](../../DOCUMENTATION_MAINTENANCE.md)** — What docs to update per change
-- **[../../GOTCHAS.md](../../GOTCHAS.md)** — Add gotchas discovered during implementation
+- **[../../documentation-maintenance.md](../../documentation-maintenance.md)** — What docs to update per change
+- **[../../gotchas.md](../../gotchas.md)** — Add gotchas discovered during implementation
 - **[../../.claude/memory/PATTERNS.md](../../.claude/memory/PATTERNS.md)** — Add new patterns to Session Learnings
-- **[../../REVIEW_POLICY.md](../../REVIEW_POLICY.md)** — How to review issues for accuracy
-- **[PROCESS-OVERVIEW.md](PROCESS-OVERVIEW.md)** — Complete workflow cascade (discovery to delivery)
+- **[../../review-policy.md](../../review-policy.md)** — How to review issues for accuracy
+- **[01_process-overview.md](01_process-overview.md)** — Complete workflow cascade (discovery to delivery)

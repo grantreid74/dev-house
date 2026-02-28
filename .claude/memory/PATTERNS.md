@@ -3,11 +3,11 @@
 Session-persistent knowledge base for recurring patterns, architecture insights, and security learnings.
 
 **Quick Links (Session Reference)**:
-- **[Naming Standards Router](NAMING-STANDARDS.md)** — Quick reference for deciding file naming patterns
-- **Naming Standards**: See `docs/NAMING-STANDARDS.md` (also cached in memory)
-- **Review Policy**: See `docs/REVIEW_POLICY.md` (per-commit, per-session, quarterly reviews)
-- **Doc-Code Sync Map**: See `docs/DOCUMENTATION_MAINTENANCE.md` (what to update when you change X)
-- **Gotchas**: See `docs/GOTCHAS.md` (things that don't work out of the box)
+- **[Naming Standards Router](naming-standards.md)** — Quick reference for deciding file naming patterns
+- **Naming Standards**: See `docs/naming-standards.md` (also cached in memory)
+- **Review Policy**: See `docs/review-policy.md` (per-commit, per-session, quarterly reviews)
+- **Doc-Code Sync Map**: See `docs/documentation-maintenance.md` (what to update when you change X)
+- **Gotchas**: See `docs/gotchas.md` (things that don't work out of the box)
 
 ## Foundation Session (2026-02-28)
 

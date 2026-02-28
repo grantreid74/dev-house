@@ -78,6 +78,6 @@ Directory? → lowercase
 
 ---
 
-**Full details**: See `NAMING-STANDARDS.md` in root for complete patterns, rationale, and examples.
+**Full details**: See `naming-standards.md` in root for complete patterns, rationale, and examples.
 
 **Repository reference**: Check `docs/README.md` for how all docs are organized.

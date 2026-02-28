@@ -45,8 +45,8 @@ Build a customer-deployable **AI automation framework** for PRD-based (business 
 ## Start Here
 
 **New to Dev-House?** Start here:
-1. **[docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)** — Project vision and quick start (5 min)
-2. **[docs/architecture/GETTING-STARTED.md](docs/architecture/GETTING-STARTED.md)** — Architecture story (30 min)
+1. **[docs/project-overview.md](docs/project-overview.md)** — Project vision and quick start (5 min)
+2. **[docs/architecture/getting-started.md](docs/architecture/getting-started.md)** — Architecture story (30 min)
 3. **[docs/README.md](docs/README.md)** — Documentation index (find what you need)
 
 Then use [docs/README.md](docs/README.md) to navigate to specific topics.
@@ -97,7 +97,7 @@ dev-house/
 - **Link, don't repeat** — CLAUDE.local.md links to docs/, not full content
 - **Stable knowledge in docs** — updates persist across sessions
 - **Volatile knowledge in memory** — debugging patterns, session-specific insights
-- **Naming standards** — Quick router in `docs/NAMING-STANDARDS.md` (also cached in `.claude/memory/NAMING-STANDARDS.md`)
+- **Naming standards** — Quick router in `docs/naming-standards.md` (also cached in `.claude/memory/NAMING-STANDARDS.md`)
 
 ---
 
@@ -132,12 +132,12 @@ dev-house/
 
 **RULE: Code changes = docs updated in same commit. No deferred documentation.**
 
-1. **Before committing**: Check [docs/DOCUMENTATION_MAINTENANCE.md](docs/DOCUMENTATION_MAINTENANCE.md)
+1. **Before committing**: Check [docs/documentation-maintenance.md](docs/documentation-maintenance.md)
    - What did I change?
    - What docs must I update?
    - Update them before committing
 
-2. **Gotchas discovered?** Add to [docs/GOTCHAS.md](docs/GOTCHAS.md)
+2. **Gotchas discovered?** Add to [docs/gotchas.md](docs/gotchas.md)
    - Problem, why, solution, prevention
    - Link from relevant docs
 
@@ -145,12 +145,12 @@ dev-house/
    - Persistent knowledge across sessions
    - Add to "Session Learnings" table
 
-4. **Review policy**: [docs/REVIEW_POLICY.md](docs/REVIEW_POLICY.md)
+4. **Review policy**: [docs/review-policy.md](docs/review-policy.md)
    - Per-commit (immediate): Check map, update docs
    - Per-session (every few commits): Spot-check consistency
    - Quarterly deep review: Verify all docs against implementation
 
-5. **GitHub workflow**: [docs/workflow/GITHUB_WORKFLOW.md](docs/workflow/GITHUB_WORKFLOW.md)
+5. **GitHub workflow**: [docs/workflow/github-workflow.md](docs/workflow/github-workflow.md)
    - Use issues/PRs as narrative history of decisions
    - Issue descriptions capture "why", PRs show "how"
    - Together: complete story of project evolution
