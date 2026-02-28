@@ -42,17 +42,14 @@ Build a customer-deployable **AI automation framework** for PRD-based (business 
 
 ---
 
-## Start Here: Read the Architecture Story
+## Start Here
 
-**New to Dev-House?** Start with [docs/architecture/GETTING-STARTED.md](docs/architecture/GETTING-STARTED.md)
+**New to Dev-House?** Start here:
+1. **[docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)** — Project vision and quick start (5 min)
+2. **[docs/architecture/GETTING-STARTED.md](docs/architecture/GETTING-STARTED.md)** — Architecture story (30 min)
+3. **[docs/README.md](docs/README.md)** — Documentation index (find what you need)
 
-It explains the complete story in 30 minutes:
-1. The three separations we don't conflate
-2. How Anthropic's Harness pattern works
-3. How our architecture extends it
-4. The workflow timeline
-
-Then use [docs/README.md](docs/README.md) as the index to find specific docs.
+Then use [docs/README.md](docs/README.md) to navigate to specific topics.
 
 ---
 
@@ -100,7 +97,7 @@ dev-house/
 - **Link, don't repeat** — CLAUDE.local.md links to docs/, not full content
 - **Stable knowledge in docs** — updates persist across sessions
 - **Volatile knowledge in memory** — debugging patterns, session-specific insights
-- **Naming standards in memory** — Quick router in `.claude/memory/NAMING-STANDARDS.md` for when creating files
+- **Naming standards** — Quick router in `docs/NAMING-STANDARDS.md` (also cached in `.claude/memory/NAMING-STANDARDS.md`)
 
 ---
 
@@ -135,12 +132,12 @@ dev-house/
 
 **RULE: Code changes = docs updated in same commit. No deferred documentation.**
 
-1. **Before committing**: Check [DOCUMENTATION_MAINTENANCE.md](DOCUMENTATION_MAINTENANCE.md)
+1. **Before committing**: Check [docs/DOCUMENTATION_MAINTENANCE.md](docs/DOCUMENTATION_MAINTENANCE.md)
    - What did I change?
    - What docs must I update?
    - Update them before committing
 
-2. **Gotchas discovered?** Add to [GOTCHAS.md](GOTCHAS.md)
+2. **Gotchas discovered?** Add to [docs/GOTCHAS.md](docs/GOTCHAS.md)
    - Problem, why, solution, prevention
    - Link from relevant docs
 
@@ -148,7 +145,7 @@ dev-house/
    - Persistent knowledge across sessions
    - Add to "Session Learnings" table
 
-4. **Review policy**: [REVIEW_POLICY.md](REVIEW_POLICY.md)
+4. **Review policy**: [docs/REVIEW_POLICY.md](docs/REVIEW_POLICY.md)
    - Per-commit (immediate): Check map, update docs
    - Per-session (every few commits): Spot-check consistency
    - Quarterly deep review: Verify all docs against implementation

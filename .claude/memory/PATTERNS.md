@@ -4,10 +4,10 @@ Session-persistent knowledge base for recurring patterns, architecture insights,
 
 **Quick Links (Session Reference)**:
 - **[Naming Standards Router](NAMING-STANDARDS.md)** — Quick reference for deciding file naming patterns
-- **Naming Details**: See `NAMING-STANDARDS.md` in repository root
-- **Review Policy**: See `REVIEW_POLICY.md` in root (per-commit, per-session, quarterly reviews)
-- **Doc-Code Sync Map**: See `DOCUMENTATION_MAINTENANCE.md` (what to update when you change X)
-- **Gotchas**: See `GOTCHAS.md` (things that don't work out of the box)
+- **Naming Standards**: See `docs/NAMING-STANDARDS.md` (also cached in memory)
+- **Review Policy**: See `docs/REVIEW_POLICY.md` (per-commit, per-session, quarterly reviews)
+- **Doc-Code Sync Map**: See `docs/DOCUMENTATION_MAINTENANCE.md` (what to update when you change X)
+- **Gotchas**: See `docs/GOTCHAS.md` (things that don't work out of the box)
 
 ## Foundation Session (2026-02-28)
 
