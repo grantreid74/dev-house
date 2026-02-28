@@ -153,6 +153,11 @@ dev-house/
    - Per-session (every few commits): Spot-check consistency
    - Quarterly deep review: Verify all docs against implementation
 
+5. **GitHub workflow**: [docs/workflow/GITHUB_WORKFLOW.md](docs/workflow/GITHUB_WORKFLOW.md)
+   - Use issues/PRs as narrative history of decisions
+   - Issue descriptions capture "why", PRs show "how"
+   - Together: complete story of project evolution
+
 ---
 
 ## Search Exclusions
