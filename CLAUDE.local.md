@@ -100,6 +100,7 @@ dev-house/
 - **Link, don't repeat** — CLAUDE.local.md links to docs/, not full content
 - **Stable knowledge in docs** — updates persist across sessions
 - **Volatile knowledge in memory** — debugging patterns, session-specific insights
+- **Naming standards in memory** — Quick router in `.claude/memory/NAMING-STANDARDS.md` for when creating files
 
 ---
 

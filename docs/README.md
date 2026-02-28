@@ -6,6 +6,7 @@
 
 | What You Need | Document | Purpose |
 |---------------|----------|---------|
+| **Project naming standards** | [NAMING-STANDARDS.md](../NAMING-STANDARDS.md) | File naming patterns (sequential, snapshot, descriptive, code, config) with decision router |
 | **High-level architecture** | [architecture/overview.md](#) | System design, layers, components |
 | **How it all connects** | [architecture/decisions.md](#) | Why we chose this architecture |
 | **Claude Harness patterns** | [harness/orchestration.md](#) | Harness workflow engine |

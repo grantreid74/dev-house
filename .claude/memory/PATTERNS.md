@@ -2,6 +2,10 @@
 
 Session-persistent knowledge base for recurring patterns, architecture insights, and security learnings.
 
+**Quick Links**:
+- **[Naming Standards Router](NAMING-STANDARDS.md)** — Quick reference for deciding file naming patterns
+- **Naming Details**: See `NAMING-STANDARDS.md` in repository root
+
 ## Foundation Session (2026-02-28)
 
 ### Architecture Decisions (Foundation)
