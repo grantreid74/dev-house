@@ -28,8 +28,11 @@ START
 ## Naming Patterns
 
 ### 1. SEQUENTIAL Pattern
+
 **Context**: Documentation that forms an ordered workflow/process across multiple documents
+
 **Format**: `NN_descriptive-name.md`
+
 **Rationale**: Numbering preserves order; files naturally sort and flow correctly without relying on external index
 
 **Examples**:
@@ -46,8 +49,11 @@ START
 ---
 
 ### 2. SNAPSHOT Pattern
+
 **Context**: Non-stateful documents capturing state at a specific moment (session notes, summaries, archives)
+
 **Format**: `YYYYMMDD_HHMM_descriptive-name.md`
+
 **Rationale**: Timestamp preserves chronology; multiple snapshots coexist without overwriting; clearly marks as temporal
 
 **Examples**:
@@ -65,8 +71,11 @@ START
 ---
 
 ### 3. DESCRIPTIVE Pattern
+
 **Context**: Permanent, stateful documentation (architecture, guides, references)
+
 **Format**: `lowercase-kebab-case.md`
+
 **Rationale**: Descriptive names immediately convey content; lowercase is unix/GitHub convention; kebab-case is readable
 
 **Naming approach**:
@@ -99,8 +108,11 @@ START
 ---
 
 ### 4. FUNCTIONAL Pattern
+
 **Context**: Code and scripts (what they DO, not what they are)
+
 **Format**: `verb-noun.ext` or `noun.ext` (in `src/` or `scripts/`)
+
 **Rationale**: Functions/scripts are tools; naming them by action makes their purpose clear
 
 **Examples**:
@@ -120,9 +132,14 @@ START
 ---
 
 ### 5. CONFIG Pattern
+
 **Context**: Configuration files (data, not code)
+
 **Format**: `noun.ext` (lowercase, no spaces, appropriate extension)
+
 **Rationale**: Configs are data artifacts; named for what they configure, not what they do
+
+**Format preference**: YAML over JSON — YAML supports comments, is more readable, and is equally processable. Use JSON only when the tool requires it. Use TOML only in ecosystem-specific contexts (e.g., Rust, Python packaging).
 
 **Examples**:
 - `deployment-config.yaml` — Deployment configuration
@@ -141,8 +158,11 @@ START
 ---
 
 ### 6. DIRECTORY Pattern
+
 **Context**: Folder organization (structural, organizational)
+
 **Format**: `lowercase` (singular or plural depending on content)
+
 **Rationale**: Directories are organizational containers; consistent casing for navigation
 
 **Examples**:

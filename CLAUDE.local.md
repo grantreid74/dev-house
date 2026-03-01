@@ -6,7 +6,7 @@ Build a customer-deployable **AI automation framework** for PRD-based (business 
 
 **Key Focus**: Productionization — not just architecture exploration, but deployable systems that customers can run themselves.
 
-**Technology Stack**: Claude API (Codex for code generation, Harness for orchestration)
+**Technology Stack**: Claude Code + Claude API — both running on each AI employee node (see Architecture Layers). Provider-agnostic: OpenAI Agents SDK is a drop-in alternative for either role.
 
 ---
 
@@ -20,8 +20,8 @@ Build a customer-deployable **AI automation framework** for PRD-based (business 
 - **Do not conflate**: Costs, ownership, operational complexity differ
 
 **2. Two Execution Streams (Separate Worktrees)**
-- **Stream 1 (Harness)**: PRD analysis → Architectural decisions → Repo structure
-- **Stream 2 (Codex)**: Code generation → Services → Infrastructure templates
+- **Stream 1 (Harness)**: PRD analysis → PRD breakdown and dependency mapping → Task generation and prioritisation → Architectural decisions → Repo structure
+- **Stream 2 (Claude Code)**: Code generation → Services → Infrastructure templates
 - **Do not merge**: Different concerns, different tokens, different timelines
 
 **3. Local-to-Cloud Parity**
@@ -38,7 +38,7 @@ Build a customer-deployable **AI automation framework** for PRD-based (business 
 3. **Codex Code Generation** → Generate customer services, Terraform, CI/CD
 4. **OpenClaw** → Infrastructure orchestration, deployment automation, policy enforcement
 5. **Validation & Testing** → Automated correctness verification
-6. **Deployment Engine** → Customer-facing infrastructure provisioning (Docker, Terraform, K8s)
+6. **Deployment Engine** → Customer-facing infrastructure provisioning (Docker, Terraform, serverless containers [ACA, Cloud Run, Fargate], K8s) — see `docs/research/20260302_OPUS_cae-vs-kubernetes.md`
 
 ---
 
@@ -74,7 +74,7 @@ dev-house/
 │   └── standards/          # Ticket templates (versioned: v1/, v2/, ...)
 ├── src/                    # Source code
 │   ├── harness/            # Core harness orchestration
-│   ├── codex/              # Claude Codex integration
+│   ├── ai/                 # AI provider integrations (Claude Code, Claude API, OpenAI)
 │   └── deployment/         # Deployment utilities
 ├── examples/               # Example PRDs, configurations
 ├── tests/                  # Test files
@@ -85,7 +85,7 @@ dev-house/
 
 ## Context & Caching Strategy
 
-**Problem**: CLAUDE.md gets large fast. Solution: Use CLAUDE.local.md as project-specific cache + memory files for patterns.
+**Problem**: `claude-flow init` overwrites CLAUDE.md on every initialisation, destroying any additions. Solution: Use CLAUDE.local.md — claude-flow does not touch it. Also serves as project-specific cache + memory files for patterns.
 
 ### What Goes Where
 
@@ -127,13 +127,13 @@ dev-house/
 
 - Use **Glob/Grep tools** (not raw `find`/`grep`) — they respect exclusions
 - Search **src/** first, then **docs/**
-- If search requires 4+ files, spawn a subagent (Explore)
+- Spawn a subagent (Explore) when the task has significant breadth or depth — judge by context cost, not file count
 
 ### When Implementing
 
-- **Orchestrator** = you (preserve context, 3-file max in main context)
-- **Subagents** = heavy lifting (reading, analysis, implementation)
-- **Batch operations** — 1 message = all related reads, writes, edits
+- **Orchestrator** = you (preserve context; spawn subagents for significant breadth or depth)
+- **Subagents** = heavy lifting (reading, analysis, implementation) — write a complete self-contained prompt, zero session context assumed
+- **Logical group batching** — batch all operations within one logical group in a single message; don't batch across different tickets or unrelated concerns
 
 ### Documentation & Review Policy
 
@@ -159,7 +159,7 @@ dev-house/
 
 5. **GitHub workflow**: [docs/workflow/github-workflow.md](docs/workflow/github-workflow.md)
    - Use issues/PRs as narrative history of decisions
-   - Issue descriptions capture "why", PRs show "how"
+   - Issue descriptions capture "what" and "why", PRs show "how"
    - Together: complete story of project evolution
 
 ---
@@ -179,38 +179,38 @@ build/
 dist/
 ```
 
-Use Grep/Glob tools — they auto-exclude. Never raw `grep`/`find`.
+Use Grep/Glob tools — they auto-exclude. Favour internal tools over raw `grep`/`find`.
 
 ---
 
-## Critical Patterns (From Sibling Projects)
+## Critical Patterns
 
 ### 1. File Organization Rule
-**NEVER save working files to root.** Every sibling project enforces this. Subdirs only: `src/`, `tests/`, `docs/`, `scripts/`, `examples/`.
+**NEVER save working files to root.** Subdirs only: `src/`, `tests/`, `docs/`, `scripts/`, `examples/`.
 
-### 2. Batching (1 MESSAGE = ALL OPS)
-From chatbot/SPARC: Always batch in a single message:
+### 2. Logical Group Batching
+Always batch all operations within one logical group in a single message:
 - File reads (parallel)
 - File writes/edits (parallel)
 - Bash commands (parallel if independent)
 - Task spawns (parallel)
 
-Multiple messages = wasted context + worse parallelization.
+Multiple messages = wasted context + worse parallelization. Don't batch across different tickets or unrelated concerns.
 
 ### 3. Search Before Write
-From tic-tac-toe: Before writing a function/utility, grep for it. Assume it exists. Rewriting = bloat + bugs.
+Before writing a function/utility, grep for it. Assume it exists. Rewriting = bloat + bugs.
 
 ### 4. Documentation Maintenance Table
-From tic-tac-toe: Keep a table of "when you do X, update Y docs". Update in the same commit as code changes. No deferred doc updates.
+Keep a table of "when you do X, update Y docs". Update in the same commit as code changes. No deferred doc updates.
 
-### 5. Orchestrator Pattern
-From tic-tac-toe: Claude is the orchestrator (preserve context). Read ≤3 files. For 4+ files, spawn a subagent (Explore type).
+### 5. Subagent Contract
+Subagents have zero session context. When spawning one, write a complete self-contained prompt: task, context, file paths, expected output format, and model selection (see `docs/architecture/model-router.md`). An incomplete handover = an unreliable result.
 
-### 6. No Worktrees Without Explicit Ask
-From tic-tac-toe CLAUDE.local.md: **NEVER use worktrees unless user says "use a worktree"**. Worktrees caused stale branch issues.
+### 6. Worktrees Are a Concurrency Pattern
+Worktrees enable concurrent work on the same repo. If working alone sequentially, use branches and PRs — not worktrees. Use worktrees when running multiple agents simultaneously on isolated tasks.
 
 ### 7. Documentation Reference in Tickets
-From tic-tac-toe: Every ticket must list docs a subagent must read before implementing. Subagents have no session context; links prevent re-invention.
+Every ticket must list docs a subagent must read before implementing. Subagents have no session context; links prevent re-invention.
 
 ### 8. Critical Gotchas Section
 Document the pitfalls for your domain:
@@ -365,7 +365,7 @@ graph TD
 
 - **Do what is asked; nothing more, nothing less**
 - **Prefer editing existing files to creating new ones**
-- **Never proactively create documentation** unless explicitly asked
+- **In interactive sessions**: don't create documentation unless asked. In automated pipeline runs (Codex, Harness), documentation generation is implied by the workflow.
 - **Never save working files to root**
 - **Batch all related operations in a single message**
 - **Use Mermaid for all diagrams** (never ANSI art)

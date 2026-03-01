@@ -19,6 +19,7 @@
 | **Open questions** | [../CURRENT_REVIEW.md](../CURRENT_REVIEW.md) | Unresolved decisions and risks |
 | **Deployment models** | [deployment/models/README.md](deployment/models/README.md) | G-series + D-series infrastructure selection guide |
 | **Work dispatch architecture** | [architecture/work-dispatch-models.md](architecture/work-dispatch-models.md) | Coordinator-push vs worker-daemon pull — the key harness decision |
+| **Model routing** | [architecture/model-router.md](architecture/model-router.md) | Which model (Haiku/Sonnet/Opus) handles which task type; subagent handover contract |
 
 ---
 
@@ -37,6 +38,7 @@
 - **[work-dispatch-models.md](architecture/work-dispatch-models.md)** — **Key decision**: Model A (coordinator-push) vs Model B (worker-daemon pull). Task schema, node capability config, queue options, harness implications.
 - **[anthropic-harness-pattern-extended.md](architecture/anthropic-harness-pattern-extended.md)** — How Dev-House applies Anthropic's proven Harness pattern at three levels
 - **[distributed-agent-deployment.md](architecture/distributed-agent-deployment.md)** — Multi-agent distributed execution vision: N "AI employee" agents working in parallel on isolated git branches
+- **[model-router.md](architecture/model-router.md)** — Task type → model routing table (Haiku/Sonnet/Opus), subagent handover contract template, self-learning log
 
 ### Security
 - **[security-integration.md](architecture/security-integration.md)** — How security integrates at every pipeline stage (not a separate layer)
@@ -134,6 +136,7 @@ Point-in-time investigations. Frozen when written — never updated in place.
 ### Cross-Model Research
 
 - **[research/20260301_OPUS_claude-flow-convergence.md](research/20260301_OPUS_claude-flow-convergence.md)** — claude-flow vs Claude Code native: ~70-80% convergence, v3 broken, skip it. Decision: skip.
+- **[research/20260302_OPUS_cae-vs-kubernetes.md](research/20260302_OPUS_cae-vs-kubernetes.md)** — Serverless containers (ACA, Cloud Run, Fargate) vs managed K8s (AKS, EKS, GKE). Decision: serverless containers correct default for Claude API-bound workloads; K8s justified at ~15-20 services.
 - **[research/G-L1/20260301_OPUS_harness-framework-comparison.md](research/G-L1/20260301_OPUS_harness-framework-comparison.md)** — Full AI orchestration framework evaluation: Anthropic, OpenAI, open-source, cloud. Recommended stack, master matrix, Claudbot incident.
 
 ### G-L1 Pi Cluster Research

@@ -18,21 +18,26 @@ Enable customers to:
 
 ## Stack
 
-### AI Engines
-- **Claude 3.5 Sonnet** — Primary code generation (cost-efficient)
-- **Claude 3 Opus** — Complex architecture analysis (high capability)
-- **Claude 3 Haiku** — Validation, formatting (fast, cheap)
-- **OpenClaw** — Infrastructure orchestration, workflow automation
-- **Codex** — Code generation patterns
+### AI Employees (per node)
+
+Each AI employee node runs two AI subscriptions and operates autonomously:
+
+- **Claude Code ($200/month)** — Agentic code generation, file operations, tool use, task execution
+- **Claude API / Opus ($200/month)** — Architecture analysis, Harness orchestration, complex reasoning
+
+**Ongoing cost per AI employee**: ~$400/month + electricity
+
+Both are modelled as swappable providers. OpenAI Agents SDK is the fallback alternative for either role. Model routing determines which capability handles which task — see `docs/architecture/model-router.md`.
 
 ### Orchestration
 - **Harness** — Dev-House orchestration engine
 - **State Machine** — Track PRD → analysis → generation → deployment
 
 ### Deployment Targets
-- Docker
+- Docker / Docker Compose (local + staging)
 - Terraform (AWS, Azure, GCP, on-prem)
-- Kubernetes
+- Serverless containers: Azure Container Apps, Cloud Run, Fargate (see `docs/research/20260302_OPUS_cae-vs-kubernetes.md`)
+- Kubernetes (for larger customer workloads)
 - Custom plugins
 
 ---
@@ -45,7 +50,7 @@ dev-house/
 ├── CLAUDE.local.md           # Session cache & project patterns
 ├── src/                      # Implementation (to be built)
 │   ├── harness/             # Orchestration engine
-│   ├── codex/               # Claude code generation
+│   ├── ai/                  # AI provider integrations (Claude Code, Claude API, OpenAI)
 │   ├── openclaw/            # OpenClaw integration
 │   └── deployment/          # Deployment plugins
 ├── docs/                    # Always-current documentation
@@ -72,9 +77,8 @@ dev-house/
 git clone <repo> dev-house
 cd dev-house
 
-# Provide your API keys
-export CLAUDE_API_KEY="sk-..."
-export OPENCLAW_API_KEY="..."
+# Each AI employee authenticates via its own OAuth subscriptions
+# (Claude Code + Claude API — no shared API keys, each node is independent)
 
 # Write a PRD
 cat > my-app.prd << 'EOF'
