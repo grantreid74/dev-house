@@ -14,7 +14,31 @@
 
 ## Current Gotchas
 
-### (To be filled in as we discover them during implementation)
+### [Documentation] Adjacent bold metadata lines collapse into one paragraph (2026-03-01)
+
+**Problem**: Two consecutive `**Key**: value` lines with no blank line between them render as a single run-on paragraph in CommonMark markdown. E.g.:
+
+```markdown
+**Last updated**: 2026-03-01
+**Purpose**: Living document...
+```
+
+Renders as: *Last updated: 2026-03-01 Purpose: Living document...*
+
+**Why**: CommonMark treats adjacent non-blank lines as a single paragraph. The line break in source is discarded.
+
+**Solution**: Separate metadata fields with a blank line, or use a small table:
+
+```markdown
+| | |
+|--|--|
+| **Last updated** | 2026-03-01 |
+| **Purpose** | Living document of unresolved decisions... |
+```
+
+**Prevention**: Any time you write multiple `**Field**: value` header lines, add a blank line between them or use a table.
+
+**Reference**: Affects CURRENT_REVIEW.md header and any doc that uses this pattern.
 
 ---
 

@@ -1,7 +1,9 @@
 # Dev-House: Current Review & Open Questions
 
-**Last updated**: 2026-03-01
-**Purpose**: Living document of unresolved decisions, open questions, and risks. Update as decisions are made. Delete rows when resolved.
+| | |
+|--|--|
+| **Last updated** | 2026-03-01 |
+| **Purpose** | Living document of unresolved decisions, open questions, and risks. Update as decisions are made. Delete rows when resolved. |
 
 ---
 
