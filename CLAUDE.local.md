@@ -42,6 +42,12 @@ Build a customer-deployable **AI automation framework** for PRD-based (business 
 
 ---
 
+## Must Read: Session Start
+
+**Read [`docs/README.md`](docs/README.md) before anything else — every session.**
+
+It tells you exactly where every document lives. Checking it takes 30 seconds and prevents blind searching. If you're about to grep or glob, check the index first — the answer is probably already documented.
+
 ## Start Here
 
 **New to Dev-House?** Start here:
@@ -64,7 +70,8 @@ dev-house/
 │   ├── architecture/        # System design documents
 │   ├── harness/            # Harness-specific patterns
 │   ├── deployment/         # Customer deployment procedures
-│   └── patterns/           # Reusable design patterns
+│   ├── patterns/           # Reusable design patterns
+│   └── standards/          # Ticket templates (versioned: v1/, v2/, ...)
 ├── src/                    # Source code
 │   ├── harness/            # Core harness orchestration
 │   ├── codex/              # Claude Codex integration
@@ -220,6 +227,82 @@ Document the pitfalls for your domain:
 2. Links here → CLAUDE.local.md points to detailed docs
 3. Repeat patterns → memory files for debugging insights
 4. Token cost → docs + links + memory = fast restarts
+
+---
+
+## Ticket Standards
+
+**Templates**: `docs/standards/` — feature, bug, infra, refactor (semver in file header)
+**Index**: `docs/README.md#ticket-standards` — selection guide, provenance tuple, versioning rules
+
+### Ticket Self-Containment Rules
+
+Every ticket must be implementable by an agent with zero session context.
+
+**SUPPLY (mandatory):**
+- **What**: Problem statement, expected outcome, acceptance criteria
+- **Why**: Business motivation, PRD reference, customer impact
+- **Context**: File paths (with line numbers), related ticket IDs, existing infrastructure to reuse
+- **Documentation Reference**: Every doc the implementer MUST read before starting (see pattern below)
+- **Scope boundary**: What's in/out of scope, definition of done
+- **Provenance**: PRD source, template version, harness type, target repo
+
+**DO NOT SUPPLY:**
+- **How**: Solution approach is free — implementer chooses design
+- Architecture decisions that conflict with existing patterns
+- Hardcoded values that belong in config
+- Exception: if a technical constraint leaves only one viable approach, state the constraint (not the solution)
+
+### Documentation Reference Pattern (Mandatory in Every Ticket)
+
+```markdown
+## Documentation Reference
+> Read EVERY doc listed here before writing any code.
+
+**Always read:**
+- [ ] `docs/architecture/decisions.md`
+- [ ] `CLAUDE.local.md` — gotchas, criminal offences, patterns
+
+**Specific to this ticket:**
+- [ ] `docs/<path>` — [why relevant]
+
+**Search before write:**
+- [ ] Grep `src/` for: `<function_name>` before creating new code
+```
+
+### Automated Pipeline Auto-Commit
+
+The interactive "no auto-commit" rule applies to human-supervised Claude sessions.
+Automated harness pipelines (Codex, OpenClaw runs) **should commit automatically** — that's their purpose. Each completed feature = one commit, one progress update.
+
+---
+
+## Sources of Truth
+
+| Data Type | Canonical Location | Anti-pattern |
+|-----------|-------------------|--------------|
+| Customer PRD | `examples/<customer>.md` or customer-provided | Never duplicate in tickets |
+| Deployment pattern specs | `docs/deployment/deployment-patterns.md` | Not in CLAUDE.local.md |
+| Architecture decisions | `docs/architecture/decisions.md` | Not in tickets |
+| Ticket templates | `docs/standards/*.md` | Semver in file header — bump version + add changelog entry to update |
+| Harness workflow | `docs/architecture/anthropic-harness-pattern-extended.md` | Not in code |
+| Security pipeline | `docs/security/prompt-security.md` | Not duplicated |
+| Naming standards | `docs/naming-standards.md` | Not re-specified in tickets |
+| Gotchas | `docs/gotchas.md` | Discovered = document there immediately |
+
+---
+
+## Criminal Offences
+
+Things that cause silent failures or hard-to-debug problems. Don't do these.
+
+1. **Creating a ticket without a Documentation Reference section** — subagents have no session context; they will reinvent everything
+2. **Implementing without reading the referenced docs** — leads to duplication, misuse of existing patterns
+3. **Updating a template without bumping its version** — always increment semver and add a changelog entry; old tickets record which version they used
+4. **Conflating productionization cost with product cost** — Dev-House infra cost (where we run) is separate from customer infra cost (what we deploy)
+5. **Writing new utility code without grepping first** — assume it exists; duplicate implementations always diverge
+6. **Renaming anything without grepping the entire repo** — one missed reference = production bug
+7. **Running harness agents without PRD provenance fields in the ticket** — traceability breaks; quality audits become impossible
 
 ---
 

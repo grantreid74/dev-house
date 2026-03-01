@@ -234,6 +234,36 @@ Web Dashboard → HTTPS/VNET → FastAPI Provisioning API
 
 ---
 
+## Cross-Project Patterns (Imported 2026-03-01)
+
+### Rename/Refactor Discipline
+After ANY rename (function, class, variable, file, CLI command), grep the ENTIRE repo for the old name before committing. No exceptions.
+`grep -r "old_name" src/ tests/ docs/`
+One missed reference = production bug. This has bitten CompylotAI-terraform in E2E tests.
+
+### Phased Commit Strategy
+For multi-phase implementation work:
+- `feat(scope): phase 1 - <what>` — commit after each phase
+- `feat(scope): phase 2 - <what>`
+- `fix(scope): post-review corrections` — one fix commit after review
+
+Never squash phases. Each phase commit is a checkpoint for review and rollback.
+
+### Subagent Instruction Template
+When spawning implementation subagents, always include:
+> "Before writing any new function, grep for it first — assume it exists. Read before appending to existing files. Read every doc listed in the Documentation Reference section. Shared utilities belong in shared modules — check those before writing new ones."
+
+### Documentation Reference Pattern
+Every ticket MUST have a Documentation Reference section listing every doc the implementer must read. Without it, subagents reinvent everything. This is the single highest-leverage pattern from tic-tac-toe.
+
+### Ticket Provenance Fields
+Every ticket must include: PRD source, target repo, harness type, template version, concurrency tier, dependency ticket IDs. These fields enable quality audits (which template version → which output quality) and client traceability.
+
+### Template Versioning
+Ticket templates use semver in the file header (e.g., `**Version**: 1.0.0`) at stable paths (`docs/standards/feature.md`). To update: edit the file, bump the version, add a changelog entry. Git history recovers any past version. This enables quality audits: correlate template version × harness version × output quality and selectively re-run batches.
+
+---
+
 ## Session Learnings
 
 Date | Discovery | Implication | Reference

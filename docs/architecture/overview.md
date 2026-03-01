@@ -62,6 +62,8 @@ See: [Anthropic Harness Pattern Extended](anthropic-harness-pattern-extended.md)
 - **Patterns**: Reusable prompts for common scenarios (REST API, database, auth, etc.)
 
 ### 3. OpenClaw (Infrastructure Orchestration)
+
+> **Naming note**: "OpenClaw" here is Dev-House's internal infrastructure orchestration layer — Terraform execution, deployment automation, policy enforcement. This is not related to Clawdbot (the consumer messaging product that had the Anthropic TOS incident, Feb 2026). See CURRENT_REVIEW.md Section 8.
 - **Workflow Orchestration**: Execute multi-step deployments, coordinate provisioning
 - **Infrastructure Provisioning**: Terraform, CloudFormation, Ansible, cloud provider CLIs
 - **State Management**: Track infrastructure state, enable rollback

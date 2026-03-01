@@ -51,8 +51,23 @@ Harness is the most critical and least defined component. It bridges PRD → arc
 | How does Harness decide architecture? Rules? Claude? Templates? | Rules engine, LLM-guided, or hybrid | **Undefined** |
 | What is the Harness input/output format? | JSON spec? YAML? Structured prompt? | **Undefined** |
 | Where does Harness run? | Pi #2 (current TBD) | **TBD** |
-| How does Harness know when a Codex task is complete and valid? | Polling? Webhooks? Exit codes? | **Undefined** |
-| What is the retry/failure strategy for a Codex task? | Retry same node? Different node? Escalate? | **Undefined** |
+| How does Harness knows when a Codex task is complete and valid? | Polling queue? Webhooks? Heartbeat? | **Undefined** |
+| What is the retry/failure strategy for a Codex task? | Heartbeat TTL auto-return? Retry limit → human alert? | **Undefined** |
+
+**Key architectural fork — work dispatch model:**
+
+Two valid models exist. The choice changes what the Harness is responsible for. See `docs/architecture/work-dispatch-models.md` for full comparison.
+
+| | Model A: Coordinator-Dispatch | Model B: Worker-Daemon Pull |
+|--|-------------------------------|------------------------------|
+| **Harness role** | Dispatcher + monitor | Queue writer + progress monitor only |
+| **Routing logic** | Coordinator decides node per task | Each worker self-selects from queue |
+| **Node software** | Passive (receives assignments) | Active daemon (polls, claims, executes, validates, loops) |
+| **Failure handling** | Coordinator detects and reassigns | Heartbeat TTL auto-returns uncompleted tasks |
+| **Heterogeneous hardware** | Coordinator must know all node types | Node config declares own capabilities |
+| **Recommended for** | G-S1 (single node, simple) | G-L1 and above (multi-node, mixed hardware) |
+
+**Leaning toward Model B** for G-L1+ given mixed hardware (Pi + Mac Mini + Cloud). Open question: which queue backend (SQLite → Redis → SQS depending on model)?
 
 ---
 
@@ -61,7 +76,8 @@ Harness is the most critical and least defined component. It bridges PRD → arc
 | Decision | Why It Matters |
 |----------|----------------|
 | What languages and frameworks does Codex support? | Scope determines what PRDs are viable |
-| How is a PRD broken into discrete Codex tasks? | Granularity affects parallelism, reviewability, and failure isolation |
+| How is a PRD broken into discrete Codex tasks? | **Partially answered**: ticket system established (`docs/standards/`) with feature/bug/infra/refactor templates. Tickets carry PRD provenance, target repo, concurrency tier, and dependency graph — gives visibility into parallel work and worker scaling needed. Open: who creates the tickets — human, Harness, or hybrid? |
+| Where do tickets live and how does Harness read them? | GitHub Issues? JIRA? Custom store? Harness must be able to query open tickets by PRD, repo, and concurrency tier to dispatch work. **Undefined.** |
 | What templates or patterns does Codex use as a starting point? | Blank generation is slow and inconsistent. Templates accelerate and standardise. |
 | How is generated code validated before it leaves the cluster? | Linting? Unit tests? Static analysis? Contract tests? |
 | What is the human review step? Is there one? | Fully automated → risk of bad code reaching production. Human gate → slows the 1-month promise. |
@@ -135,7 +151,24 @@ Week 4: Production
 
 ---
 
-## 8. Security & Trust
+## 8. Provider TOS Risk — Existential, Not Theoretical
+
+**The Claudbot precedent**: Claudbot was a third-party tool built on Claude's API with a large user base (thousands of $200/month subscribers). Anthropic's TOS enforcement killed it. OpenAI stepped in, offered equivalent capability within their Auth0/$200 plan quota, and absorbed the user base. Anthropic lost the subscribers and the goodwill.
+
+This is not a hypothetical risk for Dev-House. PRD-to-code automation using Claude is exactly the kind of workflow that could attract TOS scrutiny (bulk API usage, automated code generation at scale, reselling AI capability to customers).
+
+| Risk | Mitigation |
+|------|------------|
+| Anthropic changes TOS or interpretation mid-contract | Multi-provider abstraction layer — swap Claude → OpenAI with no customer impact |
+| Rate limiting kills overnight batch runs | Distribute across providers; Claude for architecture, OpenAI for code gen, or vice versa |
+| Provider reprices API mid-customer-contract | Cost model must account for provider switching; don't lock customer pricing to one provider's rates |
+| Provider decides to compete directly in this space | Already happening — both Anthropic and OpenAI have coding agents. Dev-House's moat is the workflow, not the model. |
+
+**Decision (2026-03-01)**: Multi-provider abstraction is existential, not optional. The harness dispatch layer must be able to route to any provider. No single-provider dependency in the critical path.
+
+---
+
+## 9. Security & Trust
 
 From the security architecture docs — still open:
 
@@ -150,7 +183,7 @@ From the security architecture docs — still open:
 
 ---
 
-## 9. Multi-Customer Isolation
+## 10. Multi-Customer Isolation
 
 If you run multiple customers simultaneously (which the overnight batch model enables):
 
@@ -164,7 +197,7 @@ If you run multiple customers simultaneously (which the overnight batch model en
 
 ---
 
-## 10. The Dev-House Cluster vs The Customer's System
+## 11. The Dev-House Cluster vs The Customer's System
 
 This separation must be crystal clear in all docs and customer conversations:
 
@@ -182,7 +215,7 @@ Customer Production (theirs, cloud):
 
 ---
 
-## 11. OpenClaw — Largely Undefined
+## 12. OpenClaw — Largely Undefined
 
 Per the architecture docs, OpenClaw handles "infrastructure orchestration, deployment automation, policy enforcement." Almost nothing else is defined.
 
@@ -195,7 +228,7 @@ Per the architecture docs, OpenClaw handles "infrastructure orchestration, deplo
 
 ---
 
-## 12. Prioritisation — What to Build First
+## 13. Prioritisation — What to Build First
 
 Given the goal of delivering to a customer in 1 month, the critical path is:
 
@@ -219,7 +252,14 @@ Track decisions here as they are made:
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| — | — | — |
+| 2026-03-01 | Ticket standards established (`docs/standards/`) | Versioned templates (feature, bug, infra, refactor) with PRD provenance fields. Every ticket carries `(template_version, harness_type, PRD_source)` tuple for quality audits. |
+| 2026-03-01 | Multi-harness abstraction layer is a design goal | Research confirmed: Claude Agent SDK (primary), OpenAI Agents SDK (provider-agnostic, worth spiking), CrewAI/LangGraph (orchestration). Harness must be provider-agnostic — model config, not hard dependency. |
+| 2026-03-01 | OpenClaw (Clawdbot) identity confirmed | OpenClaw is a personal messaging assistant (WhatsApp/Telegram/Slack → Claude). NOT an infra tool. The "OpenClaw" in this project is a separate internal concept. TOS incident: Anthropic blocked it, creator acqui-hired by OpenAI Feb 2026. Validated TOS risk is real. |
+| 2026-03-01 | Recommended orchestration stack | Claude Agent SDK + Anthropic Harness Pattern + CrewAI or LangGraph + MCP + Hooks. No single cloud platform adopted wholesale — all are cloud-runtime-only except Google ADK (open-source, ARM-compatible). |
+| 2026-03-01 | No platform natively generates Terraform from specs | Confirmed across AWS, Google, Azure, OpenAI, all open-source frameworks. IaC generation is Dev-House's unique value — the pipeline that does it end-to-end. Build it, don't buy it. |
+| 2026-03-01 | Quality instrumentation via provenance tracking | Template version × harness version × output quality will be tracked. Enables selective re-runs: "re-run all tickets generated with anthropic-harness-v1 through v2 and compare". |
+| 2026-03-01 | Skip claude-flow entirely | 70-80% of features now native in Claude Code (Agent Teams, custom subagents, 17-event hooks). v3 is actively broken (GitHub issues #958, #945, #984, #1082 — single maintainer, memory leaks, SQL injection, commands that throw help errors). Only gap is structured shared state, bridgeable with a simple SQLite MCP server (~100 lines, half a day). See `docs/research/20260301_OPUS_claude-flow-convergence.md`. |
+| 2026-03-01 | Deployment model framework established (G-series + D-series) | Generation Infrastructure (G-L1/L2/L3/C1) selected independently from Customer Deployment (D-T3/T4). Model docs in `docs/deployment/models/`. Research scoped to model subfolders (`docs/research/G-L1/` for Pi-specific). |
 
 ---
 

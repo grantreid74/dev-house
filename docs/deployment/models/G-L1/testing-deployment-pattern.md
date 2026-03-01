@@ -2,7 +2,7 @@
 
 **Date**: 2026-03-01
 **Context**: Solution to the GPU testing paradox — cluster generates code, desktop has GPU, GitHub is the transport layer between them.
-**Related**: [cluster-topology.md](cluster-topology.md), [Pi5-Real-Data-Analysis.md](../research/20260228_OPUS_Pi5-Real-Data-Analysis.md)
+**Related**: [cluster-topology.md](cluster-topology.md), [Pi5-Real-Data-Analysis.md](../../../research/G-L1/20260228_OPUS_Pi5-Real-Data-Analysis.md)
 
 ---
 
