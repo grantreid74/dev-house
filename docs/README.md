@@ -29,13 +29,13 @@
 - **overview.md** — Layers (PRD input → Harness → Codex → Deployment)
 - **decisions.md** — Architectural decisions and rationale
 - **data-flow.md** — How data flows through the system
-- **[CRITICAL-SEPARATIONS.md](#)** — Three fundamental separations: (1) Productionization vs Product, (2) Two execution streams, (3) Local-to-cloud parity
-- **[anthropic-harness-pattern-extended.md](#)** — How Dev-House applies Anthropic's proven Harness pattern at three levels
-- **[dev-house-operational-infrastructure.md](#)** — Where Dev-House itself executes (self-hosted vs cloud cost analysis)
-- **[execution-streams-codex-vs-harness.md](#)** — Two separate streams: Harness orchestration vs Codex code generation (with separate worktrees)
+- **[critical-separations.md](architecture/critical-separations.md)** — Three fundamental separations: (1) Productionization vs Product, (2) Two execution streams, (3) Local-to-cloud parity
+- **[anthropic-harness-pattern-extended.md](architecture/anthropic-harness-pattern-extended.md)** — How Dev-House applies Anthropic's proven Harness pattern at three levels
+- **[dev-house-operational-infrastructure.md](architecture/dev-house-operational-infrastructure.md)** — Where Dev-House itself executes (self-hosted vs cloud cost analysis)
+- **[execution-streams-codex-vs-harness.md](architecture/execution-streams-codex-vs-harness.md)** — Two separate streams: Harness orchestration vs Codex code generation (with separate worktrees)
 
 ### Getting Started
-- **[GETTING-STARTED.md](#)** — 30-minute narrative explaining the complete Dev-House story from problem to solution
+- **[getting-started.md](architecture/getting-started.md)** — 30-minute narrative explaining the complete Dev-House story from problem to solution
 
 ### Security (Critical)
 - **[security/prompt-security.md](#)** — Three-phase security pipeline (discovery, dev, runtime)
@@ -51,9 +51,9 @@
 ## Workflow Documents
 
 ### Process & Operations
-- **[workflow/PROCESS-OVERVIEW.md](#)** — Complete cascade from discovery to delivery with inter-system sequence diagrams and intra-system process flows showing all 5 phases and 20+ breakdown points
-- **[workflow/FAILURE-RECOVERY.md](#)** — Comprehensive failure handling across all phases with recovery procedures, git state recovery, and escalation matrix
-- **[workflow/DAILY-OPERATIONS.md](#)** — Session-by-session operational procedures (Setup → Analysis → Codex → Features → Infrastructure → Delivery) with concrete steps and bash commands
+- **[workflow/01_process-overview.md](workflow/01_process-overview.md)** — Complete cascade from discovery to delivery with inter-system sequence diagrams and intra-system process flows showing all 5 phases and 20+ breakdown points
+- **[workflow/03_failure-recovery.md](workflow/03_failure-recovery.md)** — Comprehensive failure handling across all phases with recovery procedures, git state recovery, and escalation matrix
+- **[workflow/02_daily-operations.md](workflow/02_daily-operations.md)** — Session-by-session operational procedures (Setup → Analysis → Codex → Features → Infrastructure → Delivery) with concrete steps and bash commands
 
 ---
 
