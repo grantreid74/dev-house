@@ -16,9 +16,9 @@ We apply [Anthropic's Harness pattern](https://www.anthropic.com/engineering/eff
 graph TD
     PRD["📋 Customer PRD<br/>(Business Requirements)"]
 
-    HARNESS["⚙️ Harness Orchestration<br/>(Claude Opus)<br/>─<br/>Initializer: Analyze PRD<br/>→ ARCHITECTURAL_DECISION.md<br/>→ feature_list (0/200 done)<br/>─<br/>Analyzer: Each session<br/>→ Implement one decision"]
+    HARNESS["⚙️ Harness Orchestration<br/>(Workflow Engine)<br/>─<br/>Initializer: Analyze PRD<br/>→ ARCHITECTURAL_DECISION.md<br/>→ feature_list (0/200 done)<br/>─<br/>Analyzer: Each session<br/>→ Dispatch one decision to agents"]
 
-    CODEX["🔵 Codex Code Generation<br/>(Claude Sonnet)<br/>─<br/>Initializer: Generate services<br/>→ baseline code + features<br/>─<br/>Generators: Each session<br/>→ Implement one feature<br/>→ Test → Commit → Progress"]
+    CODEX["🔵 Code Generation<br/>(Claude Code + OpenAI Codex)<br/>Two concurrent agents per node<br/>─<br/>Initializer: Generate services<br/>→ baseline code + features<br/>─<br/>Generators: Each session<br/>→ Implement one feature<br/>→ Test → Commit → Progress"]
 
     OPENCLAW["🔧 OpenClaw Deployment<br/>─<br/>Initializer: Generate Terraform<br/>→ terraform/ skeleton<br/>─<br/>Orchestrator: Each session<br/>→ Provision one component<br/>→ Validate → Apply → Track"]
 
@@ -46,20 +46,26 @@ See: [Anthropic Harness Pattern Extended](anthropic-harness-pattern-extended.md)
 
 ### 1. Harness (Orchestration Engine)
 - **Input**: PRD document (business requirements)
-- **Output**: Workflow of tasks for Claude + OpenClaw
+- **Output**: Task queue for code generation agents + progress tracking
 - **Responsibility**:
   - Parse PRD into structured requirements
-  - Decompose into Claude API calls
+  - Dispatch tasks to code generation agents (Claude Code or OpenAI Codex)
   - State tracking (what's done, what's next, what failed)
   - Error recovery
   - Customer feedback loops
 
-### 2. Claude Integration (Code & Architecture)
-- **Claude 3.5 Sonnet**: Code generation from requirements (cost-efficient)
-- **Claude 3 Opus**: Architecture analysis and recommendations (high-capability)
-- **Claude 3 Haiku**: Validation, formatting, quick tasks (fast, cheap)
-- **Codex**: Code patterns and templates
-- **Patterns**: Reusable prompts for common scenarios (REST API, database, auth, etc.)
+### 2. Code Generation (Dual Provider Model)
+
+Each AI employee node runs two concurrent code generation agents — both implement tickets, both are treated as equivalent and interchangeable:
+
+- **Claude Code** (Anthropic, ~$200/month) — agentic code generation via Claude Code CLI; file operations, tool use, long-horizon task execution
+- **OpenAI Codex** (~$200/month) — agentic code generation via OpenAI Codex; equivalent capability, different provider
+
+**Why two providers?** Provider redundancy — if one goes down, the other keeps working. No vendor lock-in. Cost is ~$400/month + electricity per AI employee node.
+
+Model routing (Haiku/Sonnet/Opus tier) happens within each provider independently. See `docs/architecture/model-router.md`.
+
+**Patterns**: Reusable prompts for common scenarios (REST API, database, auth, etc.)
 
 ### 3. OpenClaw (Infrastructure Orchestration)
 
@@ -93,18 +99,17 @@ See: [Anthropic Harness Pattern Extended](anthropic-harness-pattern-extended.md)
 sequenceDiagram
     participant Customer
     participant Harness
-    participant Claude
+    participant CodeAgent as Code Agent<br/>(Claude Code or OpenAI Codex)
     participant OpenClaw
     participant Cloud
 
     Customer->>Harness: 1. Provide PRD
-    Harness->>Claude: 2. Analyze PRD, recommend architecture
-    Claude-->>Harness: Node.js + Express + PostgreSQL
-    Harness->>Claude: 3. Generate REST API code
-    Claude-->>Harness: Generated code
+    Harness->>Harness: 2. Analyze PRD, decide architecture<br/>(may call AI for reasoning)
+    Harness->>CodeAgent: 3. Dispatch task: Generate REST API code
+    CodeAgent-->>Harness: Generated code committed
     Harness->>Harness: 4. Validate code (lint, type check)
-    Harness->>Claude: 5. Generate Terraform for infrastructure
-    Claude-->>Harness: Terraform code
+    Harness->>CodeAgent: 5. Dispatch task: Generate Terraform
+    CodeAgent-->>Harness: Terraform code committed
     Harness->>Harness: 6. Validate Terraform
     Harness->>OpenClaw: 7. Deploy infrastructure and app
     OpenClaw->>Cloud: Provision resources
@@ -129,7 +134,7 @@ sequenceDiagram
 
 ### Model 1: SaaS (Cloud)
 - Harness runs on cloud infrastructure (customer-managed VPC)
-- Claude API calls go to Anthropic
+- Code generation agents (Claude Code + OpenAI Codex) run on cloud nodes
 - Deployment targets: customer's cloud (AWS, Azure, GCP)
 
 ### Model 2: Customer Self-Hosted
@@ -153,6 +158,6 @@ sequenceDiagram
 ## Next: Detailed Components
 
 - [Harness Orchestration Engine](../harness/orchestration.md)
-- [Claude Codex Integration](../codex/generation.md)
+- [Code Generation Integration](../codex/generation.md)
 - [Deployment Architecture](../deployment/customer-deployment.md)
 

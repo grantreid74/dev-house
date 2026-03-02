@@ -52,7 +52,7 @@ Pricing Analysis                Pricing Analysis
 
 ## Separation 2: Two Execution Streams (Harness vs Codex)
 
-### Stream 1: Harness Orchestration (Claude)
+### Stream 1: Harness Orchestration (Workflow Engine)
 
 ```
 PRD Analysis & Architectural Decisions
@@ -60,7 +60,7 @@ PRD Analysis & Architectural Decisions
 ├── Decompose into services (FE, BE, etc.)
 ├── Select deployment pattern (Tier 1-4)
 ├── Plan repository structure (separate repos vs monorepo)
-└── Document architectural decision
+└── Document architectural decision → dispatch to code generation agents
     ↓
     Commits to: decision/[customer-id] branch
     Output: ARCHITECTURAL_DECISION.md, SERVICE_DECOMPOSITION.yaml, etc.
@@ -68,13 +68,13 @@ PRD Analysis & Architectural Decisions
 
 **Worktree**: `harness/[customer-id]/`
 
-**Tools**: Claude Harness, git branches for decision tracking
+**Tools**: Harness orchestration engine; may call Claude or OpenAI for reasoning (PRD analysis). Not itself an AI subscription.
 
 **Timeline**: Day 1-2 (analysis phase)
 
-**Cost**: ~$0.30-0.50 per PRD (Claude API calls)
+**Cost**: ~$0.30-0.50 per PRD (AI API calls for reasoning — small volume)
 
-### Stream 2: Codex Code Generation (Codex)
+### Stream 2: Codex Code Generation (Dual Provider)
 
 ```
 Code & Infrastructure Generation
@@ -103,7 +103,7 @@ Code & Infrastructure Generation
 | Aspect | Harness | Codex | Issue if Merged |
 |--------|---------|-------|-----------------|
 | **Output** | Architecture plan | Running code | Mixing code with decision artifacts |
-| **Token allocation** | Opus (architecture decisions) | Sonnet (code generation) | Can't split budget or track ROI |
+| **Token allocation** | Harness reasoning calls (low volume) | Code generation (Claude Code + Codex, high volume) | Can't split budget or track ROI |
 | **Parallel work** | One per customer | One per service | Customer A's Harness blocks Customer B's Codex |
 | **Debugging** | "Architecture is wrong" | "Generated code is broken" | Can't isolate root cause |
 | **Git strategy** | Branch per PRD | Branch per service | Merge conflicts across concerns |
@@ -237,13 +237,13 @@ CMD ["uvicorn", "src.main:app"]
 
 ```
 Office Mac minis (always on)
-├── Mac mini 1: Harness coordinator
-├── Mac mini 2: Codex agent (gen services)
-└── Mac mini 3: Infrastructure agent (gen Terraform)
+├── Mac mini 1: Harness coordinator (orchestration engine)
+├── Mac mini 2: Claude Code agent + OpenAI Codex agent (gen services, concurrent)
+└── Mac mini 3: Claude Code agent + OpenAI Codex agent (gen Terraform, concurrent)
 
 Contributor devices (on-demand)
-├── Laptop 1: Codex agent (gen frontend)
-├── Laptop 2: Codex agent (gen backend)
+├── Laptop 1: Claude Code agent + OpenAI Codex agent (gen frontend)
+├── Laptop 2: Claude Code agent + OpenAI Codex agent (gen backend)
 └── Personal devices: Underutilized capacity
 
 All connected via Tailscale (single virtual LAN)
@@ -287,12 +287,14 @@ laptop-1:
 ```yaml
 device: mac-mini-1
 tokens:
-  harness_claude: oauth_[mac-mini-1_harness_v2]
-  codex_generation: oauth_[mac-mini-1_codex_v2]
+  claude_code: oauth_[mac-mini-1_claude_v2]       # Anthropic Claude Code subscription
+  openai_codex: oauth_[mac-mini-1_codex_v2]       # OpenAI Codex subscription
+  # Both code generation agents run concurrently on this node
 
 device: laptop-1
 tokens:
-  codex_generation: oauth_[laptop-1_codex_v2]
+  claude_code: oauth_[laptop-1_claude_v2]
+  openai_codex: oauth_[laptop-1_codex_v2]
 ```
 
 **Prevents:**

@@ -6,7 +6,7 @@ Build a customer-deployable **AI automation framework** for PRD-based (business 
 
 **Key Focus**: Productionization — not just architecture exploration, but deployable systems that customers can run themselves.
 
-**Technology Stack**: Claude Code + Claude API — both running on each AI employee node (see Architecture Layers). Provider-agnostic: OpenAI Agents SDK is a drop-in alternative for either role.
+**Technology Stack**: Each AI employee node runs two concurrent code generation agents — Claude Code (Anthropic, ~$200/month) + OpenAI Codex (OpenAI, ~$200/month). Both implement tickets from the queue. Provider redundancy: if one goes down, the other continues. The Harness is a separate orchestration engine (not an AI subscription).
 
 ---
 

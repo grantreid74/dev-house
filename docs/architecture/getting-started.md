@@ -45,12 +45,14 @@ Before we start, understand what we are NOT conflating:
   - Scaling: One per customer
 
 **Separation 2: Two Execution Streams (Not One)**
-- **Stream 1 (Harness)**: Analyze PRD → architectural decisions
-  - Uses Claude Opus (most capable)
+- **Stream 1 (Harness)**: Analyze PRD → architectural decisions → task dispatch
+  - The Harness is an orchestration engine, not an AI subscription
+  - May call Claude or OpenAI for reasoning; primary role is coordination
   - Separate worktree: `harness/[customer-id]/`
   - Outputs decision files, not code
 - **Stream 2 (Codex)**: Generate code → services, tests, CI/CD
-  - Uses Claude Sonnet (balanced cost/capability)
+  - Two concurrent code generation agents per node: Claude Code (Anthropic) + OpenAI Codex
+  - Both are interchangeable; if one is unavailable the other continues
   - Separate worktree: `codex/[customer-id]/`
   - Outputs running code, ready to test
 
@@ -108,7 +110,7 @@ Dev-House: Triggers Harness Orchestration
 ### Session 1 (Harness Initializer): ~2 hours
 
 ```
-Harness Agent (Claude Opus) reads PRD:
+Harness Orchestration Engine reads PRD:
 ├── Analyzes customer profile (budget, team, compliance)
 ├── Decomposes into services (frontend, backend, etc.)
 ├── Selects deployment pattern (Tier 1-4)
@@ -120,14 +122,16 @@ Harness Agent (Claude Opus) reads PRD:
     ├── REPO_STRUCTURE.yaml        (how customer code is organized)
     └── Git commit: "feat: initial architecture for [customer]"
 
-Status: Handed off to Codex
+Status: Tasks written to queue → code generation agents claim them
 ```
 
-### Sessions 2-5 (Codex Generators): 4 hours each (parallel)
+### Sessions 2-5 (Code Generation): 4 hours each (parallel)
 
 ```
 For each service (frontend, backend, infrastructure):
-├── Spawn Codex agent (Claude Sonnet)
+├── Claude Code agent claims task from queue
+├── OpenAI Codex agent claims next task from queue
+├── Both run concurrently — provider-agnostic, interchangeable
 ├── Generate baseline code (scaffold, tests, etc.)
 ├── Feature loop (repeated per session):
 │   ├── Read feature_list.json ("implement login form")
@@ -279,7 +283,7 @@ Once you understand the architecture, use these tools:
 | **What runs** | Harness agents (ours) | Codex agents (ours) | Customer infrastructure |
 | **Where** | Self-hosted + Tailscale | Self-hosted + Tailscale | Cloud (Tier 1-4) |
 | **Cost** | $200-600/mo total | Included in Harness | $25-500+/mo per customer |
-| **Model** | Claude Opus | Claude Sonnet | Anthropic SDK |
+| **Model** | Harness engine (small AI calls for reasoning) | Claude Code + OpenAI Codex (concurrent per node) | Terraform / cloud provider |
 | **Output** | Architecture decisions | Running code | Deployed system |
 | **Workflow** | Initializer + analyzers | Initializer + generators | Initializer + provisioners |
 

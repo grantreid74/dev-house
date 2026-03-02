@@ -20,14 +20,16 @@ Enable customers to:
 
 ### AI Employees (per node)
 
-Each AI employee node runs two AI subscriptions and operates autonomously:
+Each AI employee node runs two concurrent code generation agents and operates autonomously:
 
-- **Claude Code ($200/month)** — Agentic code generation, file operations, tool use, task execution
-- **Claude API / Opus ($200/month)** — Architecture analysis, Harness orchestration, complex reasoning
+- **Claude Code (Anthropic, ~$200/month)** — Agentic code generation; claims tasks from queue, writes code, runs tests, commits
+- **OpenAI Codex (~$200/month)** — Agentic code generation; equivalent capability, different provider
 
 **Ongoing cost per AI employee**: ~$400/month + electricity
 
-Both are modelled as swappable providers. OpenAI Agents SDK is the fallback alternative for either role. Model routing determines which capability handles which task — see `docs/architecture/model-router.md`.
+Both agents implement tickets from the same queue. Provider redundancy: if one goes down the other keeps working. No vendor lock-in — either provider can be replaced without changing the Harness or customer output.
+
+The **Harness** is a separate orchestration engine (not an AI subscription) — it analyzes PRDs, generates tickets, manages the queue, and tracks progress. See `docs/architecture/model-router.md` for model routing within each provider.
 
 ### Orchestration
 - **Harness** — Dev-House orchestration engine

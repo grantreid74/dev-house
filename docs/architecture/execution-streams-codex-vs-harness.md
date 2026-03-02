@@ -35,9 +35,9 @@ Harness Orchestration (Claude)
 
 ---
 
-## Stream 1: Harness Orchestration (Claude)
+## Stream 1: Harness Orchestration (Workflow Engine)
 
-**Purpose**: Analyze PRD, make architectural decisions, plan infrastructure
+**Purpose**: Analyze PRD, make architectural decisions, plan infrastructure, dispatch tasks to code generation agents
 
 **Input**: Customer PRD specification
 
@@ -49,9 +49,10 @@ Harness Orchestration (Claude)
 - Infrastructure component list
 
 **Execution model**:
-- Runs locally on dev device via Claude Harness
-- Orchestrates via Git branches (decision tracking)
-- No code generation; only analysis and planning
+- Harness is an orchestration engine (software you build), not an AI subscription
+- May call Claude or OpenAI APIs for reasoning during PRD analysis (low volume)
+- Orchestrates via Git branches (decision tracking) and task queue
+- No code generation; only analysis, planning, and task dispatch
 
 **Example flow**:
 
@@ -82,7 +83,7 @@ harness/[customer-id]/
 
 ---
 
-## Stream 2: Codex Code Generation (Codex Agent)
+## Stream 2: Code Generation (Dual Provider — Claude Code + OpenAI Codex)
 
 **Purpose**: Generate code and infrastructure for the customer
 
@@ -98,8 +99,9 @@ harness/[customer-id]/
 - Docker Compose for local development
 
 **Execution model**:
-- Runs locally on dev device via Codex Agent
-- Generates code via Codex API
+- Two concurrent agents per node: Claude Code (Anthropic) + OpenAI Codex
+- Both agents claim tasks from the same queue; both produce equivalent output
+- Provider redundancy: if one goes down the other continues
 - Uses Git branching for all changes (PR-based workflow)
 - Validates code via automated checks
 
@@ -256,39 +258,43 @@ Automated review checks:
 
 ```yaml
 # Dev-House OAuth Configuration
+# NOTE: Harness is a workflow engine, not an AI subscription.
+# Code generation is done by two independent provider subscriptions per node.
 
-harness_stream:
-  oauth_scope: "claude-harness-orchestration"
-  allowed_models: ["claude-opus-4-6"]  # Architecture decisions need Opus
-  monthly_budget: $2,000
-  rate_limit: 100 requests/min
-  purpose: "PRD analysis, architectural decisions"
+# Per-node: two code generation agent subscriptions
+claude_code:
+  provider: Anthropic
+  subscription: Claude Code (~$200/month)
+  role: Code generation agent (Stream 2)
+  model_routing: Haiku/Sonnet/Opus per task complexity
 
-codex_stream:
-  oauth_scope: "claude-codex-generation"
-  allowed_models: ["claude-sonnet-4-6"]  # Code generation uses Sonnet
-  monthly_budget: $3,000
-  rate_limit: 200 requests/min
-  purpose: "Code generation, validation"
+openai_codex:
+  provider: OpenAI
+  subscription: OpenAI Codex (~$200/month)
+  role: Code generation agent (Stream 2, concurrent)
+  model_routing: equivalent tier selection per task complexity
+
+# Both claim from the same task queue — whichever is available picks up work
 ```
 
 **Per-device credentials** (if using Tailscale distributed network):
 ```yaml
 device: mac-mini-1
 assigned_roles:
-  - harness_orchestrator (owns Stream 1 for [customer-ids])
-  - codex_agent (owns Stream 2 for [customer-ids])
+  - claude_code_agent (claims Stream 2 tasks, Claude provider)
+  - openai_codex_agent (claims Stream 2 tasks, OpenAI provider)
+  # Both run concurrently. Harness coordinator runs on dedicated node.
 
 tokens:
-  harness: oauth_token_[mac-mini-1_harness]
-  codex: oauth_token_[mac-mini-1_codex]
+  claude_code: oauth_token_[mac-mini-1_claude]
+  openai_codex: oauth_token_[mac-mini-1_codex]
 ```
 
 ---
 
 ## Execution Timeline
 
-### Day 1-2: Harness Stream (Claude)
+### Day 1-2: Harness Stream (Orchestration)
 
 ```
 Mon 9am: Customer PRD arrives
@@ -302,7 +308,7 @@ Harness agent spawned
 Tue 9am: Architectural decision ready
 ```
 
-### Day 3-7: Codex Stream (Codex)
+### Day 3-7: Code Generation Stream (Claude Code + OpenAI Codex)
 
 ```
 Wed 9am: Codex reads Harness decisions
