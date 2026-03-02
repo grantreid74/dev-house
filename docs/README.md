@@ -143,6 +143,7 @@ Point-in-time investigations. Frozen when written — never updated in place.
 
 ### Cross-Model Research
 
+- **[research/20260302_SONNET_anthropic-harness-official.md](research/20260302_SONNET_anthropic-harness-official.md)** — Anthropic's official harness pattern, Claude Agent SDK, reference implementation (`autonomous-coding`), `feature_list.json` schema, confirmed gaps. **Read before implementing Harness.**
 - **[research/20260301_OPUS_claude-flow-convergence.md](research/20260301_OPUS_claude-flow-convergence.md)** — claude-flow vs Claude Code native: ~70-80% convergence, v3 broken, skip it. Decision: skip.
 - **[research/20260302_OPUS_aca-vs-kubernetes.md](research/20260302_OPUS_aca-vs-kubernetes.md)** — Serverless containers (ACA, Cloud Run, Fargate) vs managed K8s (AKS, EKS, GKE). Decision: serverless containers correct default for Claude API-bound workloads; K8s justified at ~15-20 services.
 - **[research/G-L1/20260301_OPUS_harness-framework-comparison.md](research/G-L1/20260301_OPUS_harness-framework-comparison.md)** — Full AI orchestration framework evaluation: Anthropic, OpenAI, open-source, cloud. Recommended stack, master matrix, Claudbot incident.
@@ -183,6 +184,19 @@ Created:  YYYY-MM-DD
 - Version lives in each file's header — templates evolve independently
 - To update: edit file, bump semver, add changelog entry
 - When a version bumps: review all open tickets using the previous version before implementing
+
+---
+
+## PRD Examples
+
+Live in `examples/` — not in `docs/`.
+
+- **[examples/README.md](../examples/README.md)** — Index of all PRD examples; how the Harness uses a PRD
+- **[examples/prd-template.md](../examples/prd-template.md)** — Blank PRD template (copy for every new customer)
+- **[examples/prd-acme-task-manager.md](../examples/prd-acme-task-manager.md)** — Tier 1: startup, no compliance, $50/month
+- **[examples/prd-brightpath-compliance.md](../examples/prd-brightpath-compliance.md)** — Tier 3: mid-market SOC2 SaaS, multi-tenant
+- **[examples/prd-carelink-scheduling.md](../examples/prd-carelink-scheduling.md)** — Tier 4: healthcare, HIPAA-equivalent, PHI, AWS
+- **[examples/prd-finsight-analytics.md](../examples/prd-finsight-analytics.md)** — BYOC: enterprise, existing AWS VPC/EKS, PCI-DSS
 
 ---
 
