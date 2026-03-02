@@ -72,13 +72,21 @@ See **[deployment/models/README.md](deployment/models/README.md)** for full sele
 - **[deployment/models/G-L1/cluster-topology.md](deployment/models/G-L1/cluster-topology.md)** — Node roles, RAM budgets, NVMe storage, k3s layout, expansion options
 - **[deployment/models/G-L1/testing-deployment-pattern.md](deployment/models/G-L1/testing-deployment-pattern.md)** — Cluster + desktop GPU testing solution: 3 docker-compose variants, NAS as transport, overnight batch pattern
 
+### Delivery Models
+
+How Dev-House delivers to customers (business layer — who operates what):
+
+- **[delivery/README.md](delivery/README.md)** — Selection guide: D1 (handover) vs D2 (SaaS managed, future)
+- **[delivery/D1-handover.md](delivery/D1-handover.md)** — Current default: build, provision, hand over; customer operates
+- **[delivery/future/D2-saas-managed.md](delivery/future/D2-saas-managed.md)** — Future exploration: retainer-gated managed ops
+
 ### Customer Deployment Patterns (D-series)
 
-What the customer's production system looks like:
+What the customer's system looks like (technical layer — independent of delivery model):
 
 - **[deployment/deployment-patterns.md](deployment/deployment-patterns.md)** — Tier 1-4 patterns, pattern selection framework, decision matrix
 - **[deployment/customer-repository-structure.md](deployment/customer-repository-structure.md)** — PRD-driven decisions: separate repos vs monorepo, service organisation
-- **[deployment/customer-deployment.md](deployment/customer-deployment.md)** — How customers deploy the harness
+- **[deployment/customer-deployment.md](deployment/customer-deployment.md)** — Technical setup: how the customer runs what we've built
 - **[deployment/pattern-selection-workbook.md](deployment/pattern-selection-workbook.md)** — 10-min checklist: evaluate new PRDs, select deployment pattern, check weaknesses
 - **[deployment/custom-domain-provisioning.md](deployment/custom-domain-provisioning.md)** — Custom domain setup, DNS, certificates, Keycloak, provisioning API
 
