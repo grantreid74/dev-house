@@ -136,7 +136,7 @@ Point-in-time investigations. Frozen when written — never updated in place.
 ### Cross-Model Research
 
 - **[research/20260301_OPUS_claude-flow-convergence.md](research/20260301_OPUS_claude-flow-convergence.md)** — claude-flow vs Claude Code native: ~70-80% convergence, v3 broken, skip it. Decision: skip.
-- **[research/20260302_OPUS_cae-vs-kubernetes.md](research/20260302_OPUS_cae-vs-kubernetes.md)** — Serverless containers (ACA, Cloud Run, Fargate) vs managed K8s (AKS, EKS, GKE). Decision: serverless containers correct default for Claude API-bound workloads; K8s justified at ~15-20 services.
+- **[research/20260302_OPUS_aca-vs-kubernetes.md](research/20260302_OPUS_aca-vs-kubernetes.md)** — Serverless containers (ACA, Cloud Run, Fargate) vs managed K8s (AKS, EKS, GKE). Decision: serverless containers correct default for Claude API-bound workloads; K8s justified at ~15-20 services.
 - **[research/G-L1/20260301_OPUS_harness-framework-comparison.md](research/G-L1/20260301_OPUS_harness-framework-comparison.md)** — Full AI orchestration framework evaluation: Anthropic, OpenAI, open-source, cloud. Recommended stack, master matrix, Claudbot incident.
 
 ### G-L1 Pi Cluster Research

@@ -321,7 +321,7 @@ Each customer gets dedicated infrastructure (container apps environment or manag
 │                      │                      │
 │   Customer A         │   Customer B         │
 │   ┌────────────────┐ │ ┌────────────────┐   │
-│   │ Dedicated CAE  │ │ │ Dedicated CAE  │   │
+│   │ Dedicated ACA  │ │ │ Dedicated ACA  │   │
 │   │ VNet           │ │ │ VNet           │   │
 │   │ Resource Group │ │ │ Resource Group │   │
 │   │ Storage        │ │ │ Storage        │   │
@@ -335,7 +335,7 @@ Each customer gets dedicated infrastructure (container apps environment or manag
 | Aspect | Details |
 |--------|---------|
 | **Isolation** | ✅ Complete network + data isolation |
-| **Cost** | ~$50-200/customer/month (dedicated CAE) |
+| **Cost** | ~$50-200/customer/month (dedicated ACA environment) |
 | **Scale** | ✅ Each customer scales independently |
 | **Compliance** | ✅ Excellent (full audit trail per customer) |
 | **Customization** | ✅ Complete (customer-specific configs) |
@@ -511,7 +511,7 @@ Customer A                    Customer B
 ┌───────────────────────┐    ┌───────────────────────┐
 │ Dedicated PostgreSQL  │    │ Dedicated PostgreSQL  │
 │ Dedicated Redis       │    │ Dedicated Redis       │
-│ Dedicated CAE         │    │ Dedicated CAE         │
+│ Dedicated ACA environment         │    │ Dedicated ACA environment         │
 │ Dedicated VNet        │    │ Dedicated VNet        │
 │ Resource Group        │    │ Resource Group        │
 └───────────────────────┘    └───────────────────────┘

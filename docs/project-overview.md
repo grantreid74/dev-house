@@ -38,7 +38,7 @@ The **Harness** is a separate orchestration engine (not an AI subscription) — 
 ### Deployment Targets
 - Docker / Docker Compose (local + staging)
 - Terraform (AWS, Azure, GCP, on-prem)
-- Serverless containers: Azure Container Apps, Cloud Run, Fargate (see `docs/research/20260302_OPUS_cae-vs-kubernetes.md`)
+- Serverless containers: Azure Container Apps, Cloud Run, Fargate (see `docs/research/20260302_OPUS_aca-vs-kubernetes.md`)
 - Kubernetes (for larger customer workloads)
 - Custom plugins
 

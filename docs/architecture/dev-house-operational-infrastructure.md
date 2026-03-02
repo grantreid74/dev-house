@@ -132,7 +132,7 @@ Currently assumed: Cloud VMs or K8s clusters running Layer 2.
 | Scenario | Year 1 Cost | Year 3 Cost | Parallel Agents | Scaling | Notes |
 |----------|------------|-----------|-----------------|---------|-------|
 | **Cloud-Only (AWS t3.large)** | $720 | $2,160 | 1-10 | Good | Pay-as-you-go; no capital |
-| **Cloud-Only (Azure CAE)** | $948 | $2,844 | 1-10 | Good | Slightly higher than AWS |
+| **Cloud-Only (Azure Container Apps / ACA)** | $948 | $2,844 | 1-10 | Good | Slightly higher than AWS |
 | **Cloud-Only (Google Run)** | $500 | $1,500 | 1-1000s | Excellent | Cheapest option; fully serverless |
 | **Self-Hosted (5 Mac minis)** | $4,308 | $2,808 | 10 | Limited | High year 1; amortizes after |
 | **Self-Hosted (10 Mac minis)** | $6,600 | $3,900 | 20 | Limited | Can add devices, not cloud-like |

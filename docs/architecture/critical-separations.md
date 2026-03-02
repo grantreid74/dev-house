@@ -39,7 +39,7 @@ Pricing Analysis                Pricing Analysis
 ### Cost Strategy
 
 **A) Where We Execute Orchestration** (Optimization target):
-- Option 1: Cloud VMs (Azure CAE): $948/year
+- Option 1: Azure Container Apps (ACA): $948/year
 - Option 2: Self-hosted (5 Mac minis): $4,308 Y1, $2,808 Y3+ (better long-term)
 - **Recommendation**: Hybrid (Self-hosted dev + minimal cloud prod)
 

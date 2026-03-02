@@ -38,7 +38,7 @@ Build a customer-deployable **AI automation framework** for PRD-based (business 
 3. **Codex Code Generation** → Generate customer services, Terraform, CI/CD
 4. **OpenClaw** → Infrastructure orchestration, deployment automation, policy enforcement
 5. **Validation & Testing** → Automated correctness verification
-6. **Deployment Engine** → Customer-facing infrastructure provisioning (Docker, Terraform, serverless containers [ACA, Cloud Run, Fargate], K8s) — see `docs/research/20260302_OPUS_cae-vs-kubernetes.md`
+6. **Deployment Engine** → Customer-facing infrastructure provisioning (Docker, Terraform, serverless containers [ACA, Cloud Run, Fargate], K8s) — see `docs/research/20260302_OPUS_aca-vs-kubernetes.md`
 
 ---
 
