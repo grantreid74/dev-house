@@ -244,56 +244,50 @@ Anthropic provides **Claude Agent SDK** with built-in support for:
 ### Dev-House Architecture Using SDK
 
 ```python
-from anthropic_sdk import Agent, Subagent
+import asyncio
+from claude_agent_sdk import query  # pip install claude-agent-sdk
 
-class DevHouseHarness:
-    """Orchestrates PRD analysis + code generation + infrastructure"""
+async def process_prd(prd_path: str):
+    """Anthropic Pattern: Initializer phase, then parallel coding agents."""
 
-    def __init__(self):
-        self.harness_agent = Agent(
-            model="claude-opus-4-6",
-            tools=["analyze-prd", "write-files"]
-        )
-        self.codex_agents = []  # One per service
-        self.openclaw_agent = Agent(
-            model="claude-sonnet-4-6",
-            tools=["terraform", "validate"]
-        )
+    # Phase 1: Harness Initializer (Opus — architecture decisions)
+    # Produces: ARCHITECTURAL_DECISION.md, SERVICE_DECOMPOSITION.yaml,
+    #           feature_list.json (N items, all passes=false), git commit
+    async for message in query(
+        prompt=f"Read {prd_path}. Produce ARCHITECTURAL_DECISION.md, "
+               f"SERVICE_DECOMPOSITION.yaml, and feature_list.json. "
+               f"Commit: 'feat: initial architecture for [customer]'.",
+        options={"model": "claude-opus-4-6"}
+    ):
+        print(message)
 
-    def process_prd(self, prd_text):
-        """Anthropic Pattern: Initializer phase"""
+    # Phase 2: Codex generators — one per service, run in parallel
+    # Each reads feature_list.json, implements one feature per session,
+    # commits, marks feature passes=true, ends in clean state
+    services = ["frontend", "backend-api", "infrastructure"]
+    await asyncio.gather(*[
+        _run_codex_generator(service) for service in services
+    ])
 
-        # Phase 1: Harness analysis
-        analysis = self.harness_agent.run(
-            f"Analyze this PRD and produce ARCHITECTURAL_DECISION.md: {prd_text}"
-        )
+    # Phase 3: OpenClaw provisioner — one Terraform component per session
+    async for message in query(
+        prompt="Read SERVICE_DECOMPOSITION.yaml. Generate Terraform skeleton. "
+               "Then implement one infrastructure component, validate, plan, commit.",
+        options={"model": "claude-sonnet-4-6"}
+    ):
+        print(message)
 
-        # Phase 2: Spawn Codex agents (subagents in parallel)
-        services = analysis["services"]
-        for service in services:
-            codex = Subagent(
-                model="claude-sonnet-4-6",
-                task=f"Generate {service['name']} service"
-            )
-            self.codex_agents.append(codex)
-
-        # Run all Codex agents in parallel
-        results = Subagent.run_parallel(self.codex_agents)
-
-        # Phase 3: OpenClaw infrastructure
-        infra = self.openclaw_agent.run(
-            f"Generate Terraform for {services}"
-        )
-
-        return {
-            "architecture": analysis,
-            "services": results,
-            "infrastructure": infra
-        }
+async def _run_codex_generator(service: str):
+    async for message in query(
+        prompt=f"Read feature_list.json. Pick the first pending feature for "
+               f"the {service} service. Implement it, run tests, commit, "
+               f"mark passes=true. End in a clean commitable state.",
+        options={"model": "claude-sonnet-4-6"}
+    ):
+        print(message)
 
 # Usage:
-harness = DevHouseHarness()
-deployment = harness.process_prd(customer_prd)
+asyncio.run(process_prd("examples/prd-brightpath-compliance.md"))
 ```
 
 ---
@@ -303,31 +297,47 @@ deployment = harness.process_prd(customer_prd)
 ### DIY Implementation (What we could build)
 
 ```python
-# Manual orchestration
-prd = read_file("prd.md")
-analysis = claude_api_call("analyze prd", prd)
-for service in analysis["services"]:
-    code = claude_api_call(f"generate {service}", analysis)
-    write_file(f"{service}/main.py", code)
-# Risk: No state management, lost progress on error
+# Manual — raw Anthropic API, no tool use
+import anthropic
+client = anthropic.Anthropic()
+
+prd = open("prd.md").read()
+analysis = client.messages.create(
+    model="claude-opus-4-6",
+    messages=[{"role": "user", "content": f"Analyze: {prd}"}]
+)
+for service in parse_services(analysis):
+    code = client.messages.create(
+        model="claude-sonnet-4-6",
+        messages=[{"role": "user", "content": f"Generate {service}"}]
+    )
+    open(f"{service}/main.py", "w").write(code.content[0].text)
+# Risk: no tool use, no file system access, no git, no state management,
+#       lost progress on error, must parse free-text output manually
 ```
 
 ### Using Claude Agent SDK (Recommended)
 
 ```python
-# Built-in state, context management, subagent parallelization
-harness = Agent()
-result = harness.run("""
+# Claude Agent SDK — full tool use, file system, git, resumable
+from claude_agent_sdk import query
+
+async for message in query(
+    prompt="""
     Using Anthropic's Harness pattern:
-    1. Analyze this PRD
-    2. Spawn subagents for each service
-    3. Generate code in parallel
-    4. Track progress in claude-progress.txt
-""")
-# Benefit: State tracking, reproducibility, error recovery
+    1. Read prd.md
+    2. Produce ARCHITECTURAL_DECISION.md + feature_list.json
+    3. Commit: 'feat: initial architecture for [customer]'
+    """,
+    options={"model": "claude-opus-4-6"}
+):
+    print(message)
+# Benefit: bash, file read/write, git all available as tools;
+#          state lives in files (resumable after context window);
+#          each session ends with a clean git commit
 ```
 
-**Recommendation**: Use Claude Agent SDK. It provides the Harness infrastructure we need.
+**Recommendation**: Use Claude Agent SDK. It gives Claude access to tools (bash, file system, git) — the state-in-files pattern only works if the agent can read and write files.
 
 ---
 
