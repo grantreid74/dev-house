@@ -2,16 +2,16 @@
 
 | | |
 |--|--|
-| **Last updated** | 2026-03-01 |
+| **Last updated** | 2026-03-02 |
 | **Purpose** | Living document of unresolved decisions, open questions, and risks. Update as decisions are made. Delete rows when resolved. |
 
 ---
 
 ## The Core Promise
 
-> "We do the discovery, prepare the PRD, push it through our workflow, and deliver a production-ready system in one month."
+> "We do the discovery, prepare the PRD, push it through our workflow, and deliver a system ready for UAT in one month."
 
-Everything below is a question that must be answered before that promise is reliable.
+**Note**: This is aspirational. We will deliver something that closely matches the PRD — the 1-month target is UAT-ready, not production-deployed. Production deployment follows after UAT sign-off and is the customer's milestone, not ours. Everything below is a question that must be answered before that promise is reliable.
 
 ---
 
@@ -115,7 +115,7 @@ This is the hardest question and the one most likely to break the 1-month promis
 
 ---
 
-## 7. The 1-Month Promise — Is It Realistic?
+## 7. The 1-Month Promise — UAT-Ready in One Month
 
 Working backwards from "production ready in one month":
 
@@ -136,10 +136,11 @@ Week 3: Staging + Validation
 ├── Customer UAT (if required)
 └── Fix blocking issues
 
-Week 4: Production
+Week 4: UAT Close-Out + Handover
+├── Resolve UAT blockers
 ├── Final review
-├── Production deployment
-└── Handoff + documentation
+├── Handover session + runbooks
+└── Production deployment (customer's milestone, post-handover)
 ```
 
 **Risks to the timeline**:
@@ -149,7 +150,9 @@ Week 4: Production
 - Cloud provisioning issues (IAM, quotas, region availability)
 - Security review findings → remediation
 
-**The honest answer**: 1 month is achievable for well-scoped, standard-pattern systems. It requires a tight PRD, no scope changes after sign-off, and a customer who is available for UAT in Week 3. Define these constraints explicitly before making the promise.
+**The honest answer**: 1 month to UAT is achievable for well-scoped, standard-pattern systems. It requires a tight PRD, no scope changes after sign-off, and a customer who is available for UAT in Week 3. Define these constraints explicitly before making the promise.
+
+**Scaling caveat**: Throughput scales to critical-path saturation, not to node count. Adding more cluster nodes does not linearly reduce delivery time — the critical dependency chain (PRD analysis → architecture decisions → task ordering → code generation → validation) has sequential steps that cannot be parallelised. Beyond critical-path saturation, more nodes produce no gain. PRD size is also a primary variable: a large, complex PRD has a longer critical path regardless of cluster size.
 
 ---
 
