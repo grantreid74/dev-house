@@ -4,18 +4,37 @@
 
 Customers run the Dev-House harness to convert their PRD into deployed infrastructure and applications.
 
-## Deployment Models
+## Delivery Model
 
-### Model 1: Managed (SaaS)
-- Harness runs on customer-managed cloud infrastructure
-- Customer provides API keys (Claude, cloud provider)
-- We manage harness updates and monitoring
-- Customer manages deployment targets
+Dev-House generates the system and hands it over. The customer owns and operates it after handover.
 
-### Model 2: Self-Hosted
-- Customer runs harness in their own environment (Docker container, VMs, K8s)
-- Customer manages all infrastructure
-- Customer manages harness updates
+```
+Dev-House builds → Dev-House deploys (initial) → Handover → Customer operates
+```
+
+**What Dev-House delivers:**
+- Working codebase (committed to customer's git repos)
+- Provisioned cloud infrastructure (Terraform-applied, ready to run)
+- Runbooks and documentation
+- Handover session (setup walkthrough, credentials transferred)
+
+**What the customer owns after handover:**
+- All infrastructure (their cloud account, their cost)
+- Code maintenance (or they engage Dev-House for ongoing dev support)
+- Operations — scaling, monitoring, incident response
+
+**Ongoing Dev-House involvement (optional):**
+- Dev support retainer: new features, bug fixes, PRD iterations
+- NOT operational support: Dev-House does not monitor or manage customer infrastructure day-to-day
+
+*SaaS managed model (future expansion): possible if customer offers retainer for operational management. Not the default — Dev-House is currently 2 people.*
+
+## Deployment Targets
+
+### Standard: Customer Self-Hosted
+- Customer's own cloud account (AWS, Azure, GCP)
+- Terraform-provisioned by Dev-House during delivery
+- Customer takes over operations at handover
 
 ## Setup
 

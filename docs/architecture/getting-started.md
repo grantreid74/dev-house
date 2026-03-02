@@ -37,11 +37,11 @@ Before we start, understand what we are NOT conflating:
 **Separation 1: Productionization ≠ Product**
 - **Productionization**: Where our AI agents run (Dev-House's operational cost)
   - Cost: $200-600/month (self-hosted + Tailscale or cloud K8s)
-  - Ownership: Dev-House manages
+  - Ownership: Dev-House operates
   - Scaling: With customer volume
-- **Product**: Where customer's app runs (what we deliver)
-  - Cost: $25-500+/month per customer (they pay or we bill)
-  - Ownership: Customer or we manage
+- **Product**: What we deliver and hand over (customer's system)
+  - Cost: $25-500+/month (customer's cloud account — their cost)
+  - Ownership: Customer operates after handover; Dev-House may provide ongoing dev support
   - Scaling: One per customer
 
 **Separation 2: Two Execution Streams (Not One)**

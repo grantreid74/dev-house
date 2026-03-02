@@ -20,8 +20,8 @@ We create **two entirely different systems**:
 **B) Customer Product Infrastructure** (What we deliver)
 - Where customer's application runs
 - Tier 1-4 deployment patterns (Container Apps, K8s, VMs, etc.)
-- Cost: $25-500+/month per customer (customer pays or we bill)
-- Ownership: Customer operates or we manage
+- Cost: $25-500+/month (customer pays directly — their cloud account)
+- Ownership: Customer operates after handover
 - Scaling: One per customer
 
 ### Why This Matters

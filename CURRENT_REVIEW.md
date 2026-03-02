@@ -17,13 +17,13 @@ Everything below is a question that must be answered before that promise is reli
 
 ## 1. Product Definition — What Are We Actually Selling?
 
-| Question | Why It Matters |
-|----------|----------------|
-| Is Dev-House a service you run for customers, or a tool customers run themselves? | Determines hosting model, pricing, support obligations |
-| What does the customer actually receive? A running system? A git repo? A Terraform plan? | Defines "done" |
-| Who owns the generated code? You? The customer? | Legal/IP question — must be resolved before first customer |
-| Who maintains the system after delivery? | If customer maintains it, they need to understand it. If you do, that's ongoing cost. |
-| Is the 1-month clock from first meeting or from signed PRD? | Matters for scoping and setting expectations |
+| Question | Answer | Notes |
+|----------|--------|-------|
+| Is Dev-House a service you run for customers, or a tool customers run themselves? | **Deliver and hand over.** We build and provision; customer operates. | SaaS managed model is a possible future expansion (retainer), not the current model. We are 2 people — we cannot run other people's operations. |
+| What does the customer actually receive? A running system? A git repo? A Terraform plan? | **A running system** — code in their git repos, infrastructure provisioned in their cloud account, handover session, runbooks. | "Done" = live in their cloud, they can run it independently. |
+| Who owns the generated code? You? The customer? | **Customer owns it.** | Resolve in contract before first customer. |
+| Who maintains the system after delivery? | **Customer maintains operations.** Dev-House available for ongoing dev support (new features, PRD iterations) but NOT operational management. | Dev support retainer is optional and commercial. |
+| Is the 1-month clock from first meeting or from signed PRD? | **From signed PRD** (change freeze begins). | Discovery (Week 0) is separate. Clock starts when PRD is approved. |
 
 ---
 
@@ -254,6 +254,7 @@ Track decisions here as they are made:
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-03-02 | Delivery model confirmed: deliver-and-hand-over | Dev-House builds, provisions, and hands over. Customer operates. Dev-House is 2 people — cannot run other people's operations. SaaS managed model is a future expansion option only (retainer-gated). Ongoing dev support (new features, PRDs) is separate from operational management. |
 | 2026-03-01 | Ticket standards established (`docs/standards/`) | Versioned templates (feature, bug, infra, refactor) with PRD provenance fields. Every ticket carries `(template_version, harness_type, PRD_source)` tuple for quality audits. |
 | 2026-03-01 | Multi-harness abstraction layer is a design goal | Research confirmed: Claude Agent SDK (primary), OpenAI Agents SDK (provider-agnostic, worth spiking), CrewAI/LangGraph (orchestration). Harness must be provider-agnostic — model config, not hard dependency. |
 | 2026-03-01 | OpenClaw (Clawdbot) identity confirmed | OpenClaw is a personal messaging assistant (WhatsApp/Telegram/Slack → Claude). NOT an infra tool. The "OpenClaw" in this project is a separate internal concept. TOS incident: Anthropic blocked it, creator acqui-hired by OpenAI Feb 2026. Validated TOS risk is real. |

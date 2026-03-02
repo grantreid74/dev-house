@@ -11,7 +11,7 @@
 - **Serverless containers (ACA, Fargate, Cloud Run) eliminate cluster operations** but constrain networking, storage, and multi-tenancy controls. They are the correct default for teams without dedicated platform engineering.
 - **Managed Kubernetes (AKS, EKS, GKE) provides full control** at the cost of ongoing operational burden: node patching, capacity planning, RBAC policies, ingress configuration, and upgrade management. The control plane is managed; everything else is yours.
 - **The cost crossover is driven by utilisation, not service count.** Serverless containers win below ~30-40% average CPU utilisation. Above ~50% sustained utilisation, managed K8s with reserved/committed instances is 30-60% cheaper.
-- **For Dev-House's customer deployment pattern** (multi-tenant SaaS, schema-per-customer, Claude API-bound, no GPU, Terraform-provisioned), serverless containers are the better starting point. The workloads are API-bound (waiting on Claude, not computing), utilisation will be low, and the operational cost of K8s is unjustified until the customer scales beyond ~20-30 services or requires namespace-level tenant isolation with custom network policies.
+- **For Dev-House's customer deployment pattern** (Terraform-provisioned, handed over to the customer to operate, Claude API-bound, no GPU, small service count), serverless containers are the better starting choice. The workloads are API-bound (waiting on Claude, not computing), utilisation will be low, and — critically — **customers operate their own system after handover without a platform engineering team**. ACA's managed infrastructure (no nodes, no patching, auto-scaling) is far more appropriate for a team receiving a system than K8s, which requires sustained ops expertise. K8s is only justified if the customer already operates K8s, has > 15 always-on services, or requires namespace-level tenant isolation.
 - **Migration from serverless containers to K8s is straightforward** if you containerise properly (OCI images, externalised config, managed databases). What breaks is platform-specific glue: ingress annotations, scaling rules, secrets references, and IAM bindings.
 
 ---
@@ -269,7 +269,7 @@ Based on the Dev-House architecture:
 | ------------------------------ | ---------------------------------------------------------- | ---------------------------------------------------------------------- |
 | **Workload type**              | API services (Claude-bound)                                | CPU-idle most of the time (waiting on API calls, 10-20s latency)       |
 | **CPU utilisation**            | Very low (< 10% average)                                   | Serverless billing advantage is massive                                |
-| **Multi-tenancy model**        | Schema-per-customer or namespace-per-customer              | Schema-per-customer works on both; namespace-per-customer requires K8s |
+| **Operational model**          | Customer operates their own system after handover          | ACA advantage: no platform team required; K8s requires sustained ops expertise |
 | **Provisioning**               | Terraform-automated                                        | Both approaches are Terraform-friendly                                 |
 | **GPU requirement**            | None in customer system                                    | Eliminates a K8s advantage                                             |
 | **Service count per customer** | 2-5 (API gateway, harness service, worker, maybe frontend) | Below the K8s crossover point                                          |
@@ -298,7 +298,7 @@ For the typical Dev-House customer deployment:
 4. **External databases** (Azure SQL / Cloud SQL / RDS) for state; containers remain stateless
 5. **Scale-to-zero** for customer environments that are idle (development, staging, infrequent-use customers)
 
-**Cost implication**: A customer with 3 services that processes PRDs a few times per day might pay $5-15/month in compute on serverless vs $150-200/month minimum on K8s. For a multi-tenant deployment serving 20 customers, the aggregate savings are substantial.
+**Cost implication**: A customer with 3 services that processes PRDs a few times per day might pay $5-15/month in compute on serverless vs $150-200/month minimum on K8s. ACA also reduces operational burden — the customer can run their system without a platform engineering team, which is the right starting point for a delivered, handed-over system.
 
 ### 6.4 When to Recommend K8s to a Customer
 

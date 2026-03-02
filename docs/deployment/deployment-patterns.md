@@ -584,7 +584,7 @@ Total:                                         ~€380-480/month
 
 ### Overview
 
-Customer brings their own cloud account and infrastructure. Dev-House provides Terraform modules and orchestration, customer manages (or we manage on their account).
+Customer brings their own cloud account and infrastructure. Dev-House provides Terraform modules and deploys into the customer's account. Customer manages operations after handover.
 
 ```
 Customer's AWS Account                Dev-House Modules
